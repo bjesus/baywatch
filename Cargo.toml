@@ -1,0 +1,41 @@
+[package]
+name = "baywatch"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+
+# HTTP server + client
+hyper = { version = "1", features = ["http1", "http2", "server", "client"] }
+hyper-util = { version = "0.1", features = ["tokio", "http1", "http2", "server", "client-legacy"] }
+http-body-util = "0.1"
+bytes = "1"
+
+# WebSocket
+tokio-tungstenite = "0.26"
+futures-util = "0.3"
+
+# Config
+serde = { version = "1", features = ["derive"] }
+serde_yaml = "0.9"
+
+# CLI
+clap = { version = "4", features = ["derive"] }
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# XDG directories
+dirs = "6"
+
+# Shell expansion
+shellexpand = "3"
+
+# Error handling
+anyhow = "1"
+
+# Unix process management
+libc = "0.2"

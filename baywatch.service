@@ -1,0 +1,13 @@
+[Unit]
+Description=Baywatch - Lazy-loading reverse proxy daemon
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/baywatch
+Restart=on-failure
+RestartSec=5
+Environment=RUST_LOG=info
+
+[Install]
+WantedBy=default.target

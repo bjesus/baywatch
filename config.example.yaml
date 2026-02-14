@@ -1,0 +1,35 @@
+bind: 0.0.0.0
+port: 80
+domain: localhost
+# shutdown_grace: 5     # seconds before SIGKILL after SIGTERM (default: 5)
+# startup_timeout: 30   # seconds to wait for a service to become ready (default: 30)
+
+services:
+  # Each service is accessible at <name>.<domain> (e.g. myapp.localhost)
+  #
+  # Required fields:
+  #   port:    the port the service listens on
+  #   command: shell command to start the service
+  #
+  # Optional fields:
+  #   pwd:         working directory (supports ~, default: cwd)
+  #   sleep_after: seconds of inactivity before the service is stopped (default: 600)
+  #   env:         environment variables passed to the command
+
+  myapp:
+    port: 3000
+    command: npm start
+    pwd: ~/projects/myapp
+    sleep_after: 300
+
+  api:
+    port: 8000
+    command: cargo run --release
+    pwd: ~/projects/api
+
+  freetar:
+    port: 22001
+    command: uvx freetar
+    sleep_after: 60
+    env:
+      FREETAR_PORT: "22001"

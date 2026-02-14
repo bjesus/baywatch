@@ -1,0 +1,9 @@
+#!/bin/sh
+set -e
+
+setcap cap_net_bind_service=+ep /usr/bin/baywatch 2>/dev/null || true
+
+echo "baywatch installed. To get started:"
+echo "  1. Copy the example config:  mkdir -p ~/.config/baywatch && cp /usr/share/doc/baywatch/config.example.yaml ~/.config/baywatch/config.yaml"
+echo "  2. Edit your config:         $EDITOR ~/.config/baywatch/config.yaml"
+echo "  3. Start the service:        systemctl --user enable --now baywatch"

@@ -1,10 +1,14 @@
-# baywatch
+<h1 align="center">
+Baywatch
+</h1>
+<p align="center">
+<img width="300" alt="baywatch" src="https://github.com/user-attachments/assets/3daf2140-1ffa-41c1-8bb4-7a9d35e3083e" />
+</p>
 
-Run all your web apps locally, always accessible, without wasting resources. Baywatch is a reverse proxy that starts services on demand and stops them when idle.
+Baywatch runs webapps on-demand, and reverse-proxy them so they're available at `http://example.localhost/`.
 
-Point your browser at `myapp.localhost` and baywatch spawns the configured command, waits until it's ready, and proxies the request through. After a period of inactivity, the service is shut down. The next request starts it again.
-
-It's completely agnostic about how your services run - use Docker, docker-compose, npm, npx, uvx, a plain binary, or anything else that listens on a port.
+No need to run `npm run dev`, `docker-compose up` etc. Your apps will spin up when you make an HTTP request, and shut down after your configured inactivity period.
+Configure as many apps as you want - they take zero resources unless you use them, and you'll never need to remember a port number again.
 
 ## Configuration
 
@@ -79,7 +83,7 @@ Set `RUST_LOG=debug` for verbose output.
 
 ```
 # Using an AUR helper
-paru -S baywatch
+yay -S baywatch
 ```
 
 ### Debian/Ubuntu

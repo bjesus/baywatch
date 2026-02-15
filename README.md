@@ -18,13 +18,14 @@ Baywatch looks for its config at `~/.config/baywatch/config.yaml`, falling back 
 bind: 0.0.0.0
 port: 80
 domain: localhost
+idle_timeout: 900
 
 services:
   myapp:
     port: 3000
     command: npm start
     pwd: ~/projects/myapp
-    sleep_after: 300
+    idle_timeout: 300
 
   api:
     port: 8000
@@ -34,7 +35,7 @@ services:
   freetar:
     port: 22001
     command: uvx freetar
-    sleep_after: 60
+    idle_timeout: 60
     env:
       FREETAR_PORT: "22001"
 ```
@@ -48,7 +49,7 @@ Each service is accessible at `<name>.<domain>` - with the config above, `http:/
 | `port` | yes | | Port the service listens on |
 | `command` | yes | | Shell command to start the service |
 | `pwd` | no | cwd | Working directory (supports `~`) |
-| `sleep_after` | no | 600 | Seconds of inactivity before shutdown |
+| `idle_timeout` | no | 600 | Seconds of inactivity before shutdown (overrides global) |
 | `env` | no | | Environment variables for the command |
 
 ### Global options
@@ -58,6 +59,7 @@ Each service is accessible at `<name>.<domain>` - with the config above, `http:/
 | `bind` | 0.0.0.0 | Address to listen on |
 | `port` | 80 | Port to listen on |
 | `domain` | localhost | Base domain for routing |
+| `idle_timeout` | 600 | Default seconds of inactivity before shutdown |
 | `shutdown_grace` | 5 | Seconds between SIGTERM and SIGKILL |
 | `startup_timeout` | 30 | Seconds to wait for a service to respond |
 
@@ -91,7 +93,7 @@ yay -S baywatch
 Download the `.deb` from [Releases](https://github.com/bjesus/baywatch/releases):
 
 ```
-sudo dpkg -i baywatch_0.1.0_amd64.deb
+sudo dpkg -i baywatch_0.1.1_amd64.deb
 ```
 
 ### NixOS

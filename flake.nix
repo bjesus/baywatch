@@ -14,7 +14,7 @@
       {
         packages.default = pkgs.rustPlatform.buildRustPackage {
           pname = "baywatch";
-          version = "0.1.0";
+          version = "0.1.1";
           src = ./.;
           cargoLock.lockFile = ./Cargo.lock;
 
@@ -69,11 +69,12 @@
                   bind = "0.0.0.0";
                   port = 80;
                   domain = "localhost";
+                  idle_timeout = 900;
                   services.myapp = {
                     port = 3000;
                     command = "npm start";
                     pwd = "~/projects/myapp";
-                    sleep_after = 300;
+                    idle_timeout = 300;
                   };
                 }
               '';

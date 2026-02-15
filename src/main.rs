@@ -60,7 +60,7 @@ async fn main() -> anyhow::Result<()> {
             service = %name,
             port = svc.port,
             command = %svc.command,
-            sleep_after = svc.sleep_after,
+            idle_timeout = svc.idle_timeout,
             pwd = %svc.pwd.display(),
             "Registered service"
         );

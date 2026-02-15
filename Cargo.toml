@@ -1,6 +1,6 @@
 [package]
 name = "baywatch"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 description = "Lazy-loading reverse proxy daemon that spins up services on demand"
 authors = ["bjesus <github@yoavmoshe.com>"]

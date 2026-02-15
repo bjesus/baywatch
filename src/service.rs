@@ -302,7 +302,7 @@ impl ServiceManager {
                     false
                 } else {
                     inner.last_activity.elapsed()
-                        > Duration::from_secs(inner.config.sleep_after)
+                        > Duration::from_secs(inner.config.idle_timeout)
                 }
             };
 

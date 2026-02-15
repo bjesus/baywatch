@@ -2,7 +2,7 @@ use serde::Deserialize;
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 
-const DEFAULT_SLEEP_AFTER: u64 = 600; // 10 minutes
+const DEFAULT_IDLE_TIMEOUT: u64 = 600; // 10 minutes
 const DEFAULT_SHUTDOWN_GRACE: u64 = 5;
 const DEFAULT_DOMAIN: &str = "localhost";
 const DEFAULT_BIND: &str = "0.0.0.0";
@@ -17,6 +17,7 @@ struct RawConfig {
     domain: Option<String>,
     shutdown_grace: Option<u64>,
     startup_timeout: Option<u64>,
+    idle_timeout: Option<u64>,
     services: HashMap<String, RawServiceConfig>,
 }
 
@@ -25,7 +26,7 @@ struct RawServiceConfig {
     port: u16,
     command: String,
     pwd: Option<String>,
-    sleep_after: Option<u64>,
+    idle_timeout: Option<u64>,
     #[serde(default)]
     env: HashMap<String, String>,
 }
@@ -47,7 +48,7 @@ pub struct ServiceConfig {
     pub command: String,
     pub pwd: PathBuf,
     pub env: HashMap<String, String>,
-    pub sleep_after: u64,
+    pub idle_timeout: u64,
 }
 
 impl Config {
@@ -61,6 +62,8 @@ impl Config {
     /// Parse config from a YAML string.
     fn parse(yaml: &str) -> anyhow::Result<Self> {
         let raw: RawConfig = serde_yaml::from_str(yaml)?;
+
+        let global_idle_timeout = raw.idle_timeout.unwrap_or(DEFAULT_IDLE_TIMEOUT);
 
         let mut services = HashMap::new();
         for (name, raw_svc) in raw.services {
@@ -78,7 +81,7 @@ impl Config {
                     port: raw_svc.port,
                     command: raw_svc.command,
                     pwd,
-                    sleep_after: raw_svc.sleep_after.unwrap_or(DEFAULT_SLEEP_AFTER),
+                    idle_timeout: raw_svc.idle_timeout.unwrap_or(global_idle_timeout),
                     env: raw_svc.env,
                 },
             );
@@ -142,12 +145,13 @@ bind: 127.0.0.1
 port: 8080
 domain: example.com
 shutdown_grace: 10
+idle_timeout: 300
 services:
   web:
     port: 3000
     command: npm start
     pwd: ~/projects/web
-    sleep_after: 120
+    idle_timeout: 120
   api:
     port: 4000
     command: cargo run
@@ -162,11 +166,11 @@ services:
         let web = &config.services["web"];
         assert_eq!(web.port, 3000);
         assert_eq!(web.command, "npm start");
-        assert_eq!(web.sleep_after, 120);
+        assert_eq!(web.idle_timeout, 120);
 
         let api = &config.services["api"];
         assert_eq!(api.port, 4000);
-        assert_eq!(api.sleep_after, 600); // default
+        assert_eq!(api.idle_timeout, 300); // inherited from global
     }
 
     #[test]
@@ -181,5 +185,8 @@ services:
         assert_eq!(config.bind, "0.0.0.0");
         assert_eq!(config.port, 80);
         assert_eq!(config.domain, "localhost");
+
+        let app = &config.services["app"];
+        assert_eq!(app.idle_timeout, 600); // DEFAULT_IDLE_TIMEOUT
     }
 }

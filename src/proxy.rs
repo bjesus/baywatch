@@ -41,22 +41,16 @@ pub async fn proxy_request(
         .method(parts.method)
         .uri(upstream_uri);
 
-    // Copy headers, skipping hop-by-hop headers
+    // Copy headers, skipping hop-by-hop headers.
+    // The original Host header passes through untouched.
     for (key, value) in &parts.headers {
         match key {
-            &hyper::header::HOST
-            | &hyper::header::CONNECTION
-            | &hyper::header::TRANSFER_ENCODING => continue,
+            &hyper::header::CONNECTION | &hyper::header::TRANSFER_ENCODING => continue,
             _ => {
                 builder = builder.header(key, value);
             }
         }
     }
-
-    builder = builder.header(
-        hyper::header::HOST,
-        format!("127.0.0.1:{}", upstream_port),
-    );
 
     let outgoing = builder.body(Full::new(body_bytes))?;
 

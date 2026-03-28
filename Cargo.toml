@@ -1,6 +1,6 @@
 [package]
 name = "baywatch"
-version = "0.1.1"
+version = "0.2.0"
 edition = "2024"
 description = "Lazy-loading reverse proxy daemon that spins up services on demand"
 authors = ["bjesus <github@yoavmoshe.com>"]
@@ -8,7 +8,11 @@ license = "MIT"
 repository = "https://github.com/bjesus/baywatch"
 homepage = "https://github.com/bjesus/baywatch"
 keywords = ["reverse-proxy", "daemon", "lazy-loading", "development"]
-categories = ["command-line-utilities", "network-programming", "web-programming"]
+categories = [
+  "command-line-utilities",
+  "network-programming",
+  "web-programming",
+]
 readme = "README.md"
 
 [package.metadata.deb]
@@ -16,9 +20,21 @@ maintainer = "bjesus <github@yoavmoshe.com>"
 section = "net"
 priority = "optional"
 assets = [
-  ["target/release/baywatch", "usr/bin/", "755"],
-  ["baywatch.service", "usr/lib/systemd/user/", "644"],
-  ["config.example.yaml", "usr/share/doc/baywatch/", "644"],
+  [
+    "target/release/baywatch",
+    "usr/bin/",
+    "755",
+  ],
+  [
+    "baywatch.service",
+    "usr/lib/systemd/user/",
+    "644",
+  ],
+  [
+    "config.example.yaml",
+    "usr/share/doc/baywatch/",
+    "644",
+  ],
 ]
 maintainer-scripts = "pkg/deb/"
 
@@ -28,7 +44,13 @@ tokio = { version = "1", features = ["full"] }
 
 # HTTP server + client
 hyper = { version = "1", features = ["http1", "http2", "server", "client"] }
-hyper-util = { version = "0.1", features = ["tokio", "http1", "http2", "server", "client-legacy"] }
+hyper-util = { version = "0.1", features = [
+  "tokio",
+  "http1",
+  "http2",
+  "server",
+  "client-legacy",
+] }
 http-body-util = "0.1"
 bytes = "1"
 
@@ -58,3 +80,6 @@ anyhow = "1"
 
 # Unix process management
 libc = "0.2"
+
+# File watching for config reload
+notify = "7"

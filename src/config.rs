@@ -42,7 +42,7 @@ pub struct Config {
     pub services: HashMap<String, ServiceConfig>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct ServiceConfig {
     pub port: u16,
     pub command: String,

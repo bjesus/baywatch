@@ -32,6 +32,11 @@ services:
     command: cargo run --release
     pwd: ~/projects/api
 
+  dashboard:
+    port: 8787
+    command: 'parallel ::: "pnpm run dev-server" "pnpm run dev-client"'
+    pwd: ~/projects/dash
+
   freetar:
     port: 22001
     command: uvx freetar
@@ -40,7 +45,9 @@ services:
       FREETAR_PORT: "22001"
 ```
 
-Each service is accessible at `<name>.<domain>` - with the config above, `http://myapp.localhost` proxies to port 3000.
+Each service is accessible at `<name>.<domain>` - with the config above, `http://myapp.localhost` proxies to port 3000. 
+
+Baywatch auto-reloads services configuration.
 
 ### Service options
 
@@ -76,6 +83,8 @@ Or as a systemd user service:
 ```
 systemctl --user enable --now baywatch
 ```
+
+Use `baywatch tail SERVICE` for following the stdout and stderr of a service, and `baywatch restart SERVICE` to force-reload a service.
 
 Set `RUST_LOG=debug` for verbose output.
 

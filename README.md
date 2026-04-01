@@ -102,7 +102,7 @@ yay -S baywatch
 Download the `.deb` from [Releases](https://github.com/bjesus/baywatch/releases):
 
 ```
-sudo dpkg -i baywatch_0.1.1_amd64.deb
+sudo dpkg -i baywatch_0.2.1_amd64.deb
 ```
 
 ### NixOS

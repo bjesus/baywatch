@@ -265,7 +265,23 @@ async fn run_daemon(config_path: Option<&str>) -> anyhow::Result<()> {
     });
 
     // Bind the TCP listener
-    let listener = TcpListener::bind(addr).await?;
+    let listener = match TcpListener::bind(addr).await {
+        Ok(l) => l,
+        Err(e) if e.kind() == std::io::ErrorKind::PermissionDenied => {
+            let bin = std::env::current_exe()
+                .map(|p| p.display().to_string())
+                .unwrap_or_else(|_| "baywatch".into());
+            return Err(anyhow::anyhow!(
+                "Permission denied binding to {}\n\n  \
+                 Ports below 1024 require additional privileges. Either:\n\n  \
+                 1. Grant the binary the capability to bind privileged ports:\n\n     \
+                    sudo setcap cap_net_bind_service=+ep {}\n\n  \
+                 2. Or use a non-privileged port (>= 1024) in your config.",
+                addr, bin
+            ));
+        }
+        Err(e) => return Err(e.into()),
+    };
     info!(addr = %addr, "Baywatch is listening");
 
     loop {

@@ -14,7 +14,7 @@
       {
         packages.default = pkgs.rustPlatform.buildRustPackage {
           pname = "baywatch";
-          version = "0.1.1";
+          version = "0.2.1";
           src = ./.;
           cargoLock.lockFile = ./Cargo.lock;
 
